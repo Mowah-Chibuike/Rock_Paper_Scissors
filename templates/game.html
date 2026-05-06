@@ -1,0 +1,288 @@
+{% extends "layout.html" %} {% block title %}Play - Rock, Paper, Scissors Game{%
+endblock %} {% block page_styles %}
+<link href="{{ url_for('static', path='css/game.css') }}" rel="stylesheet" />
+{% endblock %} {% block content %}
+<div class="game-area">
+  <h2 class="mb-4">Make Your Choice</h2>
+
+  <!-- Score Display -->
+  <div class="score-display" id="scoreDisplay">
+    <div class="score-row">
+      <span class="score-label">Wins:</span>
+      <span id="winsCount">0</span>
+    </div>
+    <div class="score-row">
+      <span class="score-label">Losses:</span>
+      <span id="lossesCount">0</span>
+    </div>
+    <div class="score-row">
+      <span class="score-label">Ties:</span>
+      <span id="tiesCount">0</span>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div class="error-message" id="errorMessage"></div>
+
+  <!-- Choice Selection -->
+  <div class="choices-container">
+    <div>
+      <button class="choice-btn" id="rockBtn" data-choice="rock">🪨</button>
+      <span class="choice-label">Rock</span>
+    </div>
+    <div>
+      <button class="choice-btn" id="paperBtn" data-choice="paper">📄</button>
+      <span class="choice-label">Paper</span>
+    </div>
+    <div>
+      <button class="choice-btn" id="scissorsBtn" data-choice="scissors">
+        ✂️
+      </button>
+      <span class="choice-label">Scissors</span>
+    </div>
+  </div>
+
+  <button class="btn btn-brown play-btn" id="playBtn" disabled>Play</button>
+
+  <!-- Animation Area -->
+  <div class="animation-area" id="animationArea">
+    <p style="color: #8c5a3c; font-weight: 600">Let's see the results...</p>
+    <div class="animation-container">
+      <div class="animated-choice">
+        <div class="choice-display">🎲</div>
+        <div class="choice-name">Choosing...</div>
+      </div>
+      <div class="vs">VS</div>
+      <div class="animated-choice">
+        <div class="choice-display">🤖</div>
+        <div class="choice-name">AI Deciding...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Area -->
+  <div class="results-area" id="resultsArea">
+    <div class="result-display">
+      <div class="result-player">
+        <div class="result-title">Your Choice</div>
+        <div class="result-choice" id="playerChoiceEmoji"></div>
+        <div class="result-name" id="playerChoiceName"></div>
+      </div>
+      <div class="result-vs">VS</div>
+      <div class="result-ai">
+        <div class="result-title">AI Choice</div>
+        <div class="result-choice" id="aiChoiceEmoji"></div>
+        <div class="result-name" id="aiChoiceName"></div>
+      </div>
+    </div>
+
+    <div class="outcome-message" id="outcomeMessage"></div>
+
+    <div class="play-again-btns">
+      <button class="btn btn-brown" id="playAgainBtn">Play Again</button>
+      <a href="/" class="btn btn-brown-secondary">Back Home</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const choiceEmojis = {
+    rock: "🪨",
+    paper: "📄",
+    scissors: "✂️",
+  };
+
+  const choiceNames = {
+    rock: "Rock",
+    paper: "Paper",
+    scissors: "Scissors",
+  };
+
+  let selectedChoice = null;
+  let isPlaying = false;
+
+  // Load stats when page is loaded
+  window.addEventListener("load", async () => {
+    try {
+      const response = await fetch("/play/api/history");
+      if (response.ok) {
+        const stats = await response.json();
+        populateStats(stats);
+      }
+    } catch (error) {
+      console.error("Error loading stats:", error);
+    }
+  });
+
+  function populateStats(stats) {
+    const winsEl = document.getElementById("winsCount");
+    const lossesEl = document.getElementById("lossesCount");
+    const tiesEl = document.getElementById("tiesCount");
+
+    winsEl.textContent = stats.win || 0;
+    lossesEl.textContent = stats.lose || 0;
+    tiesEl.textContent = stats.tie || 0;
+  }
+
+  // Choice selection
+  document.querySelectorAll(".choice-btn").forEach((btn) => {
+    btn.addEventListener("click", function () {
+      document
+        .querySelectorAll(".choice-btn")
+        .forEach((b) => b.classList.remove("selected"));
+      console.log(this);
+      this.classList.add("selected");
+      selectedChoice = this.dataset.choice;
+      console.log(selectedChoice);
+      document.getElementById("playBtn").disabled = false;
+    });
+  });
+
+  // Play button
+  document.getElementById("playBtn").addEventListener("click", playGame);
+
+  // Play again button
+  document.getElementById("playAgainBtn").addEventListener("click", resetGame);
+
+  async function playGame() {
+    if (!selectedChoice || isPlaying) return;
+
+    isPlaying = true;
+    document.getElementById("playBtn").disabled = true;
+
+    // Show animation area
+    document.getElementById("animationArea").classList.add("active");
+    document.getElementById("resultsArea").classList.remove("active");
+    document.getElementById("errorMessage").classList.remove("active");
+
+    // Animate choices cycling
+    const animateChoices = setInterval(() => {
+      const choices = ["rock", "paper", "scissors"];
+      const randomChoice = choices[Math.floor(Math.random() * choices.length)];
+      const randomChoice2 = choices[Math.floor(Math.random() * choices.length)];
+
+      document.querySelectorAll(".choice-display")[0].textContent =
+        choiceEmojis[randomChoice];
+      document.querySelectorAll(".choice-name")[0].textContent =
+        choiceNames[randomChoice];
+
+      document.querySelectorAll(".choice-display")[1].textContent =
+        choiceEmojis[randomChoice2];
+      document.querySelectorAll(".choice-name")[1].textContent =
+        choiceNames[randomChoice2];
+    }, 200);
+
+    try {
+      // Send request to backend
+      console.log(selectedChoice);
+      const response = await fetch("/play/api/game", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ choice: selectedChoice }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Stop animation
+      clearInterval(animateChoices);
+
+      // Small delay before showing results for dramatic effect
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      // Display results
+      displayResults(data);
+
+      // Hide animation, show results
+      document.getElementById("animationArea").classList.remove("active");
+      document.getElementById("resultsArea").classList.add("active");
+    } catch (error) {
+      clearInterval(animateChoices);
+      console.error("Error:", error);
+      document.getElementById("errorMessage").textContent =
+        "Error: " + error.message;
+      document.getElementById("errorMessage").classList.add("active");
+      document.getElementById("animationArea").classList.remove("active");
+      document.getElementById("playBtn").disabled = false;
+    } finally {
+      isPlaying = false;
+      document.querySelectorAll(".choice-btn").forEach((btn) => {
+        btn.disabled = true;
+      });
+    }
+  }
+  function displayResults(data) {
+    console.log(data);
+    // Display choices
+    document.getElementById("playerChoiceEmoji").textContent =
+      choiceEmojis[data.player_choice];
+    document.getElementById("playerChoiceName").textContent =
+      choiceNames[data.player_choice];
+
+    document.getElementById("aiChoiceEmoji").textContent =
+      choiceEmojis[data.ai_choice];
+    document.getElementById("aiChoiceName").textContent =
+      choiceNames[data.ai_choice];
+
+    // Display outcome
+    const outcomeEl = document.getElementById("outcomeMessage");
+    const outcomeClass =
+      data.result === "win" ? "win" : data.result === "lose" ? "lose" : "tie";
+    console.log(outcomeClass);
+
+    outcomeEl.className = "outcome-message " + outcomeClass;
+
+    if (data.result === "win") {
+      outcomeEl.textContent = "🎉 You Win! 🎉";
+    } else if (data.result === "lose") {
+      outcomeEl.textContent = "😔 You Lose!";
+    } else {
+      outcomeEl.textContent = "🤝 It's a Tie!";
+    }
+
+    // Update score
+    updateScore(data.result);
+  }
+
+  function updateScore(result) {
+    const winsEl = document.getElementById("winsCount");
+    const lossesEl = document.getElementById("lossesCount");
+    const tiesEl = document.getElementById("tiesCount");
+
+    let wins = parseInt(winsEl.textContent);
+    let losses = parseInt(lossesEl.textContent);
+    let ties = parseInt(tiesEl.textContent);
+
+    if (result === "win") {
+      wins++;
+    } else if (result === "lose") {
+      losses++;
+    } else {
+      ties++;
+    }
+
+    winsEl.textContent = wins;
+    lossesEl.textContent = losses;
+    tiesEl.textContent = ties;
+  }
+
+  function resetGame() {
+    selectedChoice = null;
+    document
+      .querySelectorAll(".choice-btn")
+      .forEach((b) => b.classList.remove("selected"));
+    document.getElementById("playBtn").disabled = true;
+    document.getElementById("animationArea").classList.remove("active");
+    document.getElementById("resultsArea").classList.remove("active");
+    document.getElementById("errorMessage").classList.remove("active");
+    document.querySelectorAll(".choice-btn").forEach((btn) => {
+        btn.disabled = false;
+      });
+  }
+</script>
+{% endblock %}

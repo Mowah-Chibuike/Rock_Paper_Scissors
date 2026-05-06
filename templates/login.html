@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block title %}Login - Rock, Paper, Scissors Game{% endblock %}
+
+{% block page_styles %}
+<link href="{{ url_for('static', path='css/auth.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card">
+    <h2 class="auth-title mb-4">Welcome Back!</h2>
+
+    {% if error %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong>Error:</strong> {{ error }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    <form method="POST" action="/login" class="auth-form">
+      <div class="mb-3">
+        <label for="email" class="form-label">📧 Email Address</label>
+        <input
+          type="email"
+          class="form-control form-control-lg"
+          id="email"
+          name="email"
+          placeholder="you@example.com"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-brown btn-lg w-100 mb-3">
+        🔓 Log In
+      </button>
+    </form>
+
+    <div class="auth-divider">or</div>
+
+    <div class="auth-footer">
+      <p class="mb-0">
+        Don't have an account?
+        <a href="/register" class="auth-link">Create one here</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="auth-info">
+    <div class="info-card">
+      <div class="info-emoji">🎮</div>
+      <h3>Play & Win</h3>
+      <p>Challenge the AI in an epic game of Rock, Paper, Scissors</p>
+    </div>
+    <div class="info-card">
+      <div class="info-emoji">📊</div>
+      <h3>Track Stats</h3>
+      <p>Keep your game history and see how you improve over time</p>
+    </div>
+    <div class="info-card">
+      <div class="info-emoji">🏆</div>
+      <h3>Compete</h3>
+      <p>Climb the leaderboards and prove you're the best player</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

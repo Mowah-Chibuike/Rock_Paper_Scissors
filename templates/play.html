@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}Play Rock, Paper, Scissors - Game{% endblock %}
+
+{% block page_styles %}
+<link href="{{ url_for('static', path='css/play.css') }}" rel="stylesheet" />
+{% endblock %} {% block content %}
+<div class="game-container">
+  <div>
+    <h2 class="title">Get Ready to Play!</h2>
+    <p class="subtitle">Defeat the AI and claim victory</p>
+  </div>
+
+  <div class="sprite-wrapper">
+    <div class="sprite-orbit">
+      <div class="orbit-item">🪨</div>
+      <div class="orbit-item">📄</div>
+      <div class="orbit-item">✂️</div>
+      <div class="orbit-item">🎮</div>
+    </div>
+
+    <div class="sprite">🤖</div>
+
+    <div class="particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <button class="btn btn-brown start-button" onclick="startGame()">
+      🎮 Start Game
+    </button>
+  </div>
+</div>
+
+<script>
+  function startGame() {
+    // Add click animation
+    window.location.replace("/play/game");
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,149 @@
+{% extends "layout.html" %}
+
+{% block title %}Play Rock, Paper, Scissors - Online Game{% endblock %}
+
+{% block page_styles %}
+<link href="{{ url_for('static', path='css/index.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="text-center py-5 mb-5">
+  <div class="hero-emoji mb-3">✂️ 📄 🪨</div>
+  <h2 class="gradient-text display-4 mb-3">Ready to Win?</h2>
+  <p class="lead text-muted" style="color: #8C5A3C !important;">
+    Challenge the AI in the classic game of Rock, Paper, Scissors
+  </p>
+</section>
+
+<!-- How to Play -->
+<section class="mb-5 p-4 bg-white rounded shadow-sm">
+  <h2 class="text-center mb-4">How to Play</h2>
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="p-4 step-card rounded text-center">
+        <div class="step-number fw-bold mb-2">1</div>
+        <div class="fw-bold" style="color: #4B2E2B;">Choose Your Move</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-4 step-card rounded text-center">
+        <div class="step-number fw-bold mb-2">2</div>
+        <div class="fw-bold" style="color: #4B2E2B;">AI Makes Its Choice</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-4 step-card rounded text-center">
+        <div class="step-number fw-bold mb-2">3</div>
+        <div class="fw-bold" style="color: #4B2E2B;">See Who Wins!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Game Cards -->
+<section class="mb-5">
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card card-hover h-100 border-0 shadow-sm">
+        <div class="card-body text-center">
+          <div class="card-emoji mb-3">🪨</div>
+          <h5 class="card-title" style="color: #4B2E2B;">Rock</h5>
+          <p class="card-text" style="color: #8C5A3C;">
+            Crushes scissors but loses to paper. A strong defense!
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card card-hover h-100 border-0 shadow-sm">
+        <div class="card-body text-center">
+          <div class="card-emoji mb-3">📄</div>
+          <h5 class="card-title" style="color: #4B2E2B;">Paper</h5>
+          <p class="card-text" style="color: #8C5A3C;">
+            Covers rock but loses to scissors. A clever move!
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card card-hover h-100 border-0 shadow-sm">
+        <div class="card-body text-center">
+          <div class="card-emoji mb-3">✂️</div>
+          <h5 class="card-title" style="color: #4B2E2B;">Scissors</h5>
+          <p class="card-text" style="color: #8C5A3C;">
+            Cuts paper but loses to rock. A quick strike!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="mb-5 p-4 feature-section rounded">
+  <div class="row g-4">
+    <div class="col-md-6 col-lg-3">
+      <div class="d-flex gap-3">
+        <div style="font-size: 1.8rem;">⚡</div>
+        <div>
+          <strong style="color: #8C5A3C; display: block;">Instant Feedback</strong>
+          <small style="color: #4B2E2B;">Get immediate results after each round</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="d-flex gap-3">
+        <div style="font-size: 1.8rem;">🤖</div>
+        <div>
+          <strong style="color: #8C5A3C; display: block;">Smart AI</strong>
+          <small style="color: #4B2E2B;">Challenge an intelligent opponent</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="d-flex gap-3">
+        <div style="font-size: 1.8rem;">📊</div>
+        <div>
+          <strong style="color: #8C5A3C; display: block;">Score Tracking</strong>
+          <small style="color: #4B2E2B;">Keep track of your wins and losses</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="d-flex gap-3">
+        <div style="font-size: 1.8rem;">🎯</div>
+        <div>
+          <strong style="color: #8C5A3C; display: block;">Play Unlimited</strong>
+          <small style="color: #4B2E2B;">No limits on the number of games</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="mb-5 p-4 cta-bg rounded text-center">
+  <h3 class="mb-3" style="color: #4B2E2B;">Let's Play!</h3>
+  <p style="color: #8C5A3C; font-size: 1.1rem;" class="mb-3">
+    Choose your move and let the games begin. Do you have what it takes to beat the AI?
+  </p>
+  <div class="d-flex gap-2 justify-content-center flex-wrap">
+    <a href="/play" class="btn btn-brown rounded-pill px-4">🎮 Start Playing Now</a>
+    <a href="#rules" class="btn btn-brown-secondary rounded-pill px-4">📖 Learn More</a>
+  </div>
+</section>
+
+<!-- Game Rules -->
+<section id="rules" class="p-4 bg-white rounded shadow-sm">
+  <h2 class="mb-3" style="color: #4B2E2B;">Game Rules</h2>
+  <ul style="color: #4B2E2B; line-height: 2; margin-left: 1rem;">
+    <li><strong style="color: #8C5A3C;">Rock</strong> defeats Scissors</li>
+    <li><strong style="color: #8C5A3C;">Scissors</strong> defeats Paper</li>
+    <li><strong style="color: #8C5A3C;">Paper</strong> defeats Rock</li>
+    <li><strong style="color: #8C5A3C;">Same choices</strong> result in a tie</li>
+  </ul>
+</section>
+
+{% endblock %}
+

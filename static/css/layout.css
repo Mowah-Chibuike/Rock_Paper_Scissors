@@ -1,0 +1,114 @@
+/* Layout Base Styles */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #fff8f0;
+  color: #4b2e2b;
+  font-family: "Montserrat", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Luckiest Guy", cursive;
+}
+
+header {
+  background: linear-gradient(135deg, #c08552 0%, #8c5a3c 100%);
+  color: #fff8f0;
+  padding: 1.5rem 0;
+  box-shadow: 0 2px 8px rgba(75, 46, 43, 0.1);
+}
+
+header h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+}
+
+main {
+  min-height: calc(100vh - 200px);
+  padding: 2rem 0;
+}
+
+footer {
+  background-color: #4b2e2b;
+  color: #fff8f0;
+  text-align: center;
+  padding: 2rem;
+  margin-top: 3rem;
+  font-size: 0.9rem;
+}
+
+footer a {
+  color: #c08552;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Button Styles */
+
+.btn-brown {
+  background-color: #c08552;
+  color: #fff8f0;
+  border: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-brown:hover {
+  background-color: #8c5a3c;
+  color: #fff8f0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(192, 133, 82, 0.3);
+}
+
+.btn-brown-secondary {
+  background-color: #8c5a3c;
+  color: #fff8f0;
+  border: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-brown-secondary:hover {
+  background-color: #4b2e2b;
+  color: #fff8f0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(140, 90, 60, 0.3);
+}
+
+/* Utility Classes */
+
+.gradient-text {
+  background: linear-gradient(135deg, #c08552 0%, #8c5a3c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bounce {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
